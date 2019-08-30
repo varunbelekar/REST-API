@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: Spring_Boot_JPA
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: vbele
+Implementation-Vendor-Id: com.varun
+Build-Jdk: 1.8.0_191-1-redhat
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/Spring_Boot_JPA
+Created-By: Maven Integration for Eclipse
+

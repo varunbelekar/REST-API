@@ -2,6 +2,7 @@ package com.varun.apiintegration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class Test {
@@ -12,5 +13,6 @@ public class Test {
 		RestTemplate restTemplate = new RestTemplate();
 		Quote quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 		logger.info(quote.toString());
+		
 	}
 }
