@@ -12,13 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public class Test {
 
 	private static final Logger logger = LoggerFactory.getLogger(Test.class);
 
 	public static void main(String[] args) throws URISyntaxException {
-		String advertUrl = "http://marketplace-dev.liberis.co.uk/api/advert?firstName=varun&reference=ID12345&pxHeight=300&pxWidth=240";
+		String advertUrl = "http://marketplace-dev.liberis.co.uk/api/advert";
 		String tokenUrl = "http://marketplace-dev.liberis.co.uk/api/token";
 
 		RestTemplate http = new RestTemplate();
@@ -49,11 +50,16 @@ public class Test {
 		 * return http.exchange(rq, Advert.class);
 		 */
 		URI uri = new URI(advertUrl);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(advertUrl)
+														.queryParam("name", "Varun")
+														.queryParam("reference", "ID12345");
+		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("authorization", "Bearer " + token.getAccessToken());
 		
 		HttpEntity<Void> httpEntity = new HttpEntity<Void>(httpHeaders);
-		ResponseEntity<Advert> responseEntity = http.exchange(uri, HttpMethod.GET, httpEntity, Advert.class);
+		ResponseEntity<Advert> responseEntity = http.exchange(builder.toUriString(), HttpMethod.GET, httpEntity, Advert.class);
+		
 		return responseEntity;
 	}
 
