@@ -2,6 +2,9 @@ package com.varun.liberisapi;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +24,8 @@ public class Test {
 	public static void main(String[] args) throws URISyntaxException {
 		String advertUrl = "http://marketplace-dev.liberis.co.uk/api/advert";
 		String tokenUrl = "http://marketplace-dev.liberis.co.uk/api/token";
-
+		String acceptUrl = "http://marketplace-dev.liberis.co.uk/api/advert/accept/{reference}";
+		
 		RestTemplate http = new RestTemplate();
 
 		Token token = getToken(tokenUrl, http);
@@ -37,6 +41,9 @@ public class Test {
 		 * Referencesmap refMap = getReferenceMap(http, token);
 		 * System.out.println(refMap.toString());
 		 */
+		 
+		 Accept accept = accept(acceptUrl, http, token);
+		 System.out.println(accept.toString());
 	}
 
 	public static ResponseEntity<Advert> getAdvert(String advertUrl, Token token, RestTemplate http)
@@ -61,6 +68,23 @@ public class Test {
 		ResponseEntity<Advert> responseEntity = http.exchange(builder.toUriString(), HttpMethod.GET, httpEntity, Advert.class);
 		
 		return responseEntity;
+	}
+	
+public static Accept accept(String acceptUrl, RestTemplate http, Token token){
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		httpHeaders.add("authorization", "Bearer " + token.getAccessToken());
+		
+		Map<String,String> map = new LinkedHashMap<String, String>();
+		map.put("reference", "ID12345");
+		
+		HttpEntity<Accept> entity = new HttpEntity<Accept>(httpHeaders);
+		
+		URI uri = UriComponentsBuilder.fromUriString(acceptUrl)
+														   .buildAndExpand(map)
+														   .toUri();
+		return http.exchange(uri, HttpMethod.GET, entity, Accept.class).getBody();
 	}
 
 	public static HealthCheck healthCheck(RestTemplate http) {
